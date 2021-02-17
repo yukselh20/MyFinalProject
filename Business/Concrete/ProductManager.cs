@@ -22,5 +22,15 @@ namespace Business.Concrete
             // iş kodları geçerse;
             return _productDal.GetAll();// geçince ürünleri ver.
         }
+
+        public List<Product> GetAllByCategoryId(int id)
+        {
+            return _productDal.GetAll(p => p.CategoryId == id);
+        }
+
+        public List<Product> GetByUnitPrice(decimal min, decimal max)
+        {
+            return _productDal.GetAll(p=> p.UnitPrice<=max && p.UnitPrice>= min);
+        }
     }
 }
