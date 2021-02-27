@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntitiyFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,57 +11,26 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfProductDal : IProductDal
+    //normalde silme getirme ekleme fonksiyonlarını ayrı ayrı yazardık.Core katmanında ortak olan her şey var. Sadece ilgili
+    //data access layer daki classlara göre IEntityRepository i iplemente eden EfEntityRepositoryBase i kullandık.
+    //Interface deki (IEntityRepository deki) tüm fonksiyonlar EfEntityRepositoryBase classında uygulandı.
+    //IProductDal ın durma sebebi product nesnesi için özel fonksiyon yazılabilecek olması.
+    public class EfProductDal : EfEntityRepositoryBase<Product, NorthwindContext>, IProductDal
     {
-        public void Add(Product entity)
-        {
-            //IDisposable pattern implementation of c#
-            using (NorthwindContext context = new NorthwindContext()) // garbage collector ile işi bitince hemen atılır
-            {
-                var addEntity = context.Entry(entity);  // Eleme, silme güncelleme işlemleridnde istelineni bulmak için referans no lazımdır.
-                // referans numarasını bulduk
-                addEntity.State = EntityState.Added;
-                context.SaveChanges();
-            }
-        }
-
-        public void Delete(Product entity)
+        public List<ProductDetailDto> GetProductDetails()
         {
             using (NorthwindContext context = new NorthwindContext())
             {
-                var deletedEntity = context.Entry(entity); 
-                deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
-            }
-        }
+                var result = from p in context.Products
+                             join c in context.Categories
+                             on p.CategoryId equals c.CategoryId
+                             select new ProductDetailDto {ProductId = p.ProductId, 
+                                 CategoryName = c.CategoryName, ProductName = p.ProductName, 
+                                 UnitsInStock = p.UnitsInStock };
+                //Verilen yapıya göre uyanları productdetaildto nesnesine tablola.
 
-        public Product Get(Expression<Func<Product, bool>> filter)
-        {
-            using (NorthwindContext context = new NorthwindContext())
-            {
-                return context.Set<Product>().SingleOrDefault(filter);
-            }
-        }
+                return result.ToList();
 
-        public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
-        {
-            using (NorthwindContext context = new NorthwindContext())
-            {
-                //ternary operator.context.set ile ilgili yere girdik ve to list ile ordaki verileri listeledik
-                return filter == null ? 
-                    context.Set<Product>().ToList() : 
-                    context.Set<Product>().Where(filter).ToList();
-
-            }
-        }
-
-        public void Update(Product entity)
-        {
-            using (NorthwindContext context = new NorthwindContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
             }
         }
     }

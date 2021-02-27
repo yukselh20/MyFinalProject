@@ -1,4 +1,5 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntitiyFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -7,31 +8,11 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCategoryDal : ICategoryDal
+    //normalde silme getirme ekleme fonksiyonlarını ayrı ayrı yazardık.Core katmanında ortak olan her şey var. Sadece ilgili
+    //data access layer daki classlara göre IEntityRepository i iplemente eden EfEntityRepositoryBase i kullandık.
+    //Interface deki (IEntityRepository deki) tüm fonksiyonlar EfEntityRepositoryBase classında uygulandı.
+    public class EfCategoryDal : EfEntityRepositoryBase<Category, NorthwindContext>, ICategoryDal
     {
-        public void Add(Category entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Category entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Category Get(Expression<Func<Category, bool>> filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Category> GetAll(Expression<Func<Category, bool>> filter = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Category entity)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

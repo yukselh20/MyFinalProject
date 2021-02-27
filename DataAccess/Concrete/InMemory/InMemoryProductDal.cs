@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace DataAccess.Concrete.InMemory
         {
             //Oracle, sql, Posgres, MongoDb, server
             _products = new List<Product> {
-                new Product {ProductId = 1, CategoryId = 1, ProductName ="Bardak", UnitInStock = 15, UnitPrice=15 },
-                new Product {ProductId = 2, CategoryId = 1, ProductName ="Kamera", UnitInStock = 3, UnitPrice=300 },
-                new Product {ProductId = 3, CategoryId = 2, ProductName ="Telefon", UnitInStock = 2, UnitPrice=1500 },
-                new Product {ProductId = 4, CategoryId = 2, ProductName ="Klavye", UnitInStock = 65, UnitPrice=150 },
-                new Product {ProductId = 5, CategoryId = 2, ProductName ="Mouse", UnitInStock = 1, UnitPrice=85 }
+                new Product {ProductId = 1, CategoryId = 1, ProductName ="Bardak", UnitsInStock = 15, UnitPrice=15 },
+                new Product {ProductId = 2, CategoryId = 1, ProductName ="Kamera", UnitsInStock = 3, UnitPrice=300 },
+                new Product {ProductId = 3, CategoryId = 2, ProductName ="Telefon", UnitsInStock = 2, UnitPrice=1500 },
+                new Product {ProductId = 4, CategoryId = 2, ProductName ="Klavye", UnitsInStock = 65, UnitPrice=150 },
+                new Product {ProductId = 5, CategoryId = 2, ProductName ="Mouse", UnitsInStock = 1, UnitPrice=85 }
             };
         }
         public void Add(Product product)
@@ -73,6 +74,11 @@ namespace DataAccess.Concrete.InMemory
             //Where koşulu içindeki koşula bağlı olarak yeni liste oluşturur.
         }
 
+        public List<ProductDetailDto> GetProductDetails()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Product product)
         {
             // Gönderilen ürün Id sine sahip olan listedeki ürünü bulmak.
@@ -80,7 +86,7 @@ namespace DataAccess.Concrete.InMemory
             productToUpdate.CategoryId = product.CategoryId;
             productToUpdate.ProductName = product.ProductName;
             productToUpdate.UnitPrice = product.UnitPrice;
-            productToUpdate.UnitInStock = product.UnitInStock;
+            productToUpdate.UnitsInStock = product.UnitsInStock;
         }
     }
 }

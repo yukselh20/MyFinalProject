@@ -15,5 +15,6 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Product> Products { get; set; } // hangi tablo hangi class
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }
